@@ -32,4 +32,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 7860
 
 # Start the application with gunicorn
-CMD ["gunicorn", "sentiment.wsgi:application", "--bind", "0.0.0.0:7860", "--workers", "2"]
+CMD ["bash", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn sentiment.wsgi:application --bind 0.0.0.0:7860 --workers 1 --timeout 120"]
