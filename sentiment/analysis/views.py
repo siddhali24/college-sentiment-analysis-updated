@@ -1,4 +1,4 @@
 from django.http import HttpResponse
 
-def review_view(request):
+def index(request):
     return HttpResponse("Django is working")
