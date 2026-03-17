@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> {% load static%}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit a Review</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" >
+</head>
+<body>
+
+  <div class="review-container">
+    <h1>Submit Your College Review</h1>
+{% block content %}
+  
+    <form method="post" id="reviewForm" >
+  {% csrf_token %}
+    <form method="post" action="{% url 'sentiment-review' %}">
+    <textarea name="review_text" rows="5" cols="50" placeholder="Write your review here...">{{ review_text }}</textarea><br>
+    <button type="submit">Submit</button>
+</form>
+{% if result %}
+ <div class="result-box 
+    {% if result == 'Positive' %}positive
+    {% elif result == 'Neutral' %}neutral
+    {% else %}negative{% endif %}">
+    <h3>Sentiment Result:</h3>
+    <p><strong>Review:</strong> {{ review_text }}</p>
+    <p><strong>Prediction:</strong> {{ result }}</p>
+  </div>
+{% endif %}
+{% endblock %}
+    <div id="save-msg"></div>
+
+    <a href="{% url 'index' %}" class="back-link">← Back to Home</a>
+  </div>
+ 
+      <!-- {% if result %}
+    <div class="result-box">
+        Review Result: {{ result }}
+    </div>
+    {% endif %}-->
+    <script>
+  window.onload = function() {
+    if (performance.getEntriesByType("navigation")[0].type === "reload") {
+      const input = document.querySelector('input[name="review_text"]');
+      if (input) {
+        input.value = "";
+      }
+    }
+  }
+</script>
+
+       

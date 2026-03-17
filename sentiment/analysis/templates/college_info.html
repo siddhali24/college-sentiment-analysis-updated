@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> {% load static%}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Know About College</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+
+  <div class="college-info-container">
+    <h1>Know About Your College</h1>
+
+<form id="collegeForm">
+  <label for="college">Select College:</label>
+  <select id="college" name="college" required>
+    <option value="">-- Choose a College --</option>
+    {% for college in college_list %}
+  <option value="{{ college }}">{{ college }}</option>
+{% endfor %}
+  </select>
+  <button type="submit">Get Reviews</button>
+</form>
+
+<div id="college-result"></div>
+
+<script>
+  const form = document.getElementById("collegeForm");
+  const resultDiv = document.getElementById("college-result");
+
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const selectedCollege = document.getElementById("college").value;
+    if (!selectedCollege) return;
+
+    try {
+      const response = await fetch(`/get_college_reviews?college=${encodeURIComponent(selectedCollege)}`);
+      if (!response.ok) {
+        resultDiv.innerHTML = `<p style="color:red;">Error fetching reviews.</p>`;
+        return;
+      }
+      const data = await response.json();
+
+      resultDiv.innerHTML = `
+        <h2>Sentiment: <span class="${data.sentiment.toLowerCase()}">${data.sentiment}</span></h2>
+        <h3>Top Reviews:</h3>
+        <ul>${data.reviews.map(review => `<li>${review}</li>`).join('')}</ul>
+      `;
+    } catch (error) {
+      resultDiv.innerHTML = `<p style="color:red;">Failed to fetch reviews.</p>`;
+    }
+  });
+</script>

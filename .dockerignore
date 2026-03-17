@@ -1,0 +1,37 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+.DS_Store
+.vscode
+
+README.md
+.gitignore
+.dockerignore
+
+# Django specific
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
+# in your Docker image, since it will be generated during the build process.
+staticfiles/

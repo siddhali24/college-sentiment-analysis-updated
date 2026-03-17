@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+
+  <div class="about-container">
+    <h1>About This Project</h1>
+
+    <p>
+      <strong>Sentiment Analysis on College Reviews</strong> is a machine learning-based web application designed to help students and parents make informed decisions when choosing a college. By analyzing hundreds of reviews, our system provides a summarized sentiment — Positive or Negative — for each college.
+    </p>
+
+    <h2>📌 Why This Project?</h2>
+    <p>
+      Manually reading large volumes of college reviews is time-consuming. Our tool uses Natural Language Processing (NLP) to automate sentiment classification, making the decision-making process faster and more data-driven.
+    </p>
+
+    <h2>🛠 Technologies Used</h2>
+    <ul>
+      <li>HTML, CSS, JavaScript for frontend</li>
+      <li>Python with Pandas and Scikit-learn for data processing</li>
+      <li> Django for backend integration</li>
+      <li>Natural Language Processing (NLP) [BERT model] for sentiment analysis</li>
+    </ul>
+
+    <h2>👨‍💻 Team Members:</h2>
+    <p>
+      This project was developed by <ul><li>CS3149- Siddhali Kathar </li>
+        <li>CS3151- Sayli Wasre</li>
+        <li>CS3157- Sonal Raikar</li>
+        <li>CS3159- Chaitali Bhamre </li><p> It is a part of our effort to combine machine learning with real-world problems in education.</p>
+    </p>
+
+    <a href="{% url 'index' %}" class="back-link">← Back to Home</a>
+  </div>
+
+</body>
+</html>
