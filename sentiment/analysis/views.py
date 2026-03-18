@@ -6,9 +6,7 @@ import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-# =========================
-# 🔹 MODEL CONFIG (Lazy Load)
-# =========================
+# MODEL CONFIG (Lazy Load)
 MODEL_NAME = "SiddhaliK/sentiment"
 
 model = None
@@ -25,9 +23,7 @@ def load_model():
             model = None
             tokenizer = None
 
-# =========================
-# 🔹 SENTIMENT PREDICTION
-# =========================
+#  SENTIMENT PREDICTION
 def predict_sentiment(text):
     load_model()
 
@@ -50,9 +46,7 @@ def predict_sentiment(text):
     label_map = {0: "Negative", 1: "Neutral", 2: "Positive"}
     return label_map.get(predicted_class_id, "Unknown")
 
-# =========================
-# 🔹 LOAD DATASET
-# =========================
+#  LOAD DATASET
 def get_dataframe():
     try:
         data_path = os.path.join(settings.BASE_DIR, 'balanced_reviews (1).csv')
@@ -63,9 +57,8 @@ def get_dataframe():
 
 df = get_dataframe()
 
-# =========================
-# 🔹 VIEWS
-# =========================
+
+# VIEWS
 def index(request):
     return render(request, 'index.html')
 
@@ -110,9 +103,7 @@ def get_college_reviews(request):
         'reviews': top_reviews,
     })
 
-# =========================
-# 🔹 OVERRIDE LOGIC
-# =========================
+# OVERRIDE LOGIC
 def override_prediction(review, model_prediction):
     review_lower = review.lower()
 
@@ -138,9 +129,8 @@ def override_prediction(review, model_prediction):
 
     return model_prediction
 
-# =========================
-# 🔹 MAIN SENTIMENT VIEW (FIXED 🚀)
-# =========================
+
+#  MAIN SENTIMENT VIEW 
 def sentiment_analysis_view(request):
     if request.method == "POST":
         review_text = request.POST.get("review_text")
