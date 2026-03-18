@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.conf import settings
 from django.http import JsonResponse
 import os
@@ -17,14 +17,22 @@ tokenizer = None
 def load_model():
     global model, tokenizer
     if model is None:
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-        model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+            model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+        except Exception as e:
+            print("MODEL LOAD ERROR:", e)
+            model = None
+            tokenizer = None
 
 # =========================
 # 🔹 SENTIMENT PREDICTION
 # =========================
 def predict_sentiment(text):
     load_model()
+
+    if model is None or tokenizer is None:
+        return "Model Error"
 
     inputs = tokenizer(
         text,
@@ -46,8 +54,12 @@ def predict_sentiment(text):
 # 🔹 LOAD DATASET
 # =========================
 def get_dataframe():
-    data_path = os.path.join(settings.BASE_DIR, 'balanced_reviews (1).csv')
-    return pd.read_csv(data_path)
+    try:
+        data_path = os.path.join(settings.BASE_DIR, 'balanced_reviews (1).csv')
+        return pd.read_csv(data_path)
+    except Exception as e:
+        print("CSV LOAD ERROR:", e)
+        return pd.DataFrame()
 
 df = get_dataframe()
 
@@ -61,6 +73,9 @@ def Aboutus(request):
     return render(request, 'Aboutus.html')
 
 def college_info(request):
+    if df.empty:
+        return render(request, 'college_info.html', {'college_list': []})
+
     college_list = sorted(df['college'].dropna().unique().tolist())
     return render(request, 'college_info.html', {'college_list': college_list})
 
@@ -95,9 +110,6 @@ def get_college_reviews(request):
         'reviews': top_reviews,
     })
 
-def review(request):
-    return render(request, 'review.html')
-
 # =========================
 # 🔹 OVERRIDE LOGIC
 # =========================
@@ -127,7 +139,7 @@ def override_prediction(review, model_prediction):
     return model_prediction
 
 # =========================
-# 🔹 MAIN SENTIMENT VIEW
+# 🔹 MAIN SENTIMENT VIEW (FIXED 🚀)
 # =========================
 def sentiment_analysis_view(request):
     if request.method == "POST":
@@ -137,16 +149,9 @@ def sentiment_analysis_view(request):
             model_prediction = predict_sentiment(review_text)
             result = override_prediction(review_text, model_prediction)
 
-            request.session['last_result'] = result
-            request.session['last_review'] = review_text
+            return render(request, "review.html", {
+                "result": result,
+                "review_text": review_text
+            })
 
-            return redirect('sentiment-review')
-
-    else:
-        result = request.session.pop('last_result', None)
-        review_text = request.session.pop('last_review', "")
-
-        return render(request, "review.html", {
-            "result": result,
-            "review_text": review_text
-        })
+    return render(request, "review.html")
