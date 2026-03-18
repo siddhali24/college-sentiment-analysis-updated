@@ -19,8 +19,4 @@ The project aims to develop a Machine Learning-based Sentiment Analysis model th
 </div>
 
 
-## Model
-
-This application uses the `SiddhaliK/sentiment` model from Hugging Face Model Hub, which is a fine-tuned BERT model for sentiment classification.
-
 **Note:** This repository is configured for deployment on Hugging Face Spaces with Docker support.
