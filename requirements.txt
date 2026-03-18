@@ -8,4 +8,4 @@ torch
 sentencepiece
 gunicorn
 whitenoise
-safetoners
+safetensors
